@@ -9,6 +9,8 @@ package com.krakenrising.spaceinvaders.engine;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.graphics.RectF;
 import android.util.Log;
 import com.krakenrising.spaceinvaders.view.Drawable;
 import java.util.HashMap;
@@ -30,6 +32,7 @@ public class Engine extends Drawable {
     private float tilt = 0;
     private boolean ready = false;
     private Bullet tankBullet = null;
+    private float loadAngle = 0;
     public void initialize() {
         swarm = new Swarm(this, getWidth(), getHeight());
         tank = new Tank(this, getWidth(), getHeight());
@@ -119,6 +122,27 @@ public class Engine extends Drawable {
                 for(Component component : drop) {
                     components.remove(component);
                 }
+            }
+        }
+        else {
+            int radius = 50;
+            Paint paint = new Paint();
+            paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+            paint.setColor(Color.BLACK);
+            paint.setStyle(Style.FILL);
+            RectF rect = new RectF(getWidth()/2 - radius, getHeight()/2 - radius, getWidth()/2 + radius, getHeight()/2 + radius);
+            canvas.drawCircle(getWidth()/2, getHeight()/2, radius, paint);
+            paint.setStyle(Style.STROKE);
+            paint.setStrokeMiter(4);
+            paint.setColor(Color.GREEN);
+            canvas.drawCircle(getWidth()/2, getHeight()/2, radius, paint);
+            paint.setStyle(Style.FILL);
+            canvas.drawArc(rect, loadAngle, 30, true, paint);
+            paint.setColor(Color.WHITE);
+            canvas.drawText("Loading...", getWidth()/2, getHeight()/2 + radius + 20, paint);
+            loadAngle += 15;
+            if(loadAngle == 360) {
+                loadAngle = 0;
             }
         }
     }

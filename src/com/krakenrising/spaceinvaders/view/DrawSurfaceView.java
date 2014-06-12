@@ -29,7 +29,6 @@ public class DrawSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d("Swarm","Create: " + getWidth() + " " + getHeight());
         thread = new DrawThread(holder, context, delegate);
         thread.start();
         delegate.updateDimensions(getWidth(), getHeight());
@@ -37,7 +36,6 @@ public class DrawSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.d("Swarm","Change: " + getWidth() + " " + getHeight());
         delegate.updateDimensions(width, height);
     }
 

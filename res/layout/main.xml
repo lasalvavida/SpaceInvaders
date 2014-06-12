@@ -6,19 +6,14 @@
     android:paddingRight="16dp"
     android:orientation="vertical" >
     <TextView
-        android:id="@+id/x"
+        android:id="@+id/title"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/y"
+        android:layout_height="wrap_content"
+        android:text="Space Invaders"/>
+    <Button
+        android:id="@+id/start"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/z"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/theta"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:onClick="onClick"/>
 </LinearLayout>

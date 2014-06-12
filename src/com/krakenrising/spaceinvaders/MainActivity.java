@@ -7,11 +7,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.TextView;
 import com.krakenrising.spaceinvaders.engine.Engine;
 import com.krakenrising.spaceinvaders.view.DrawSurfaceView;
 
@@ -23,15 +21,8 @@ public class MainActivity extends Activity implements SensorEventListener, OnTou
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        engine = new Engine();
-        DrawSurfaceView view = new DrawSurfaceView(this, engine);
-        view.setOnTouchListener(this);
-        setContentView(view);
+        setContentView(R.layout.main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        sensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
-        sensorManager.registerListener(this, 
-                sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public void onSensorChanged(SensorEvent event) {
@@ -49,5 +40,15 @@ public class MainActivity extends Activity implements SensorEventListener, OnTou
     public boolean onTouch(View v, MotionEvent event) {
         engine.spawnTankBullet(5);
         return true;
+    }
+    
+    public void onClick(View v) {
+        engine = new Engine();
+        DrawSurfaceView view = new DrawSurfaceView(this, engine);
+        view.setOnTouchListener(this);
+        setContentView(view);
+        sensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
+        sensorManager.registerListener(this, 
+            sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
     }
 }
