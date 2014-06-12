@@ -22,6 +22,8 @@ public class Engine extends Drawable {
     private Swarm swarm = null;
     private Tank tank = null;
     private HashSet<Bullet> bullets = new HashSet<Bullet>();
+    private HashSet<Barrier> barriers = new HashSet<Barrier>();
+    private HashSet<Component> newComponents = new HashSet<Component>();
     private HashSet<Component> components = new HashSet<Component>();
     private HashMap<Component, Component> collisionCheck = new HashMap<Component, Component>();
     private int score = 0;
@@ -31,6 +33,11 @@ public class Engine extends Drawable {
     public void initialize() {
         swarm = new Swarm(this, getWidth(), getHeight());
         tank = new Tank(this, getWidth(), getHeight());
+        for(int i=0; i<4; i++) {
+            Barrier barrier = new Barrier((getWidth()/4)*i + getWidth()/16, getHeight()*7/8, getWidth()/8, getHeight()/16);
+            barriers.add(barrier);
+            components.add(barrier);
+        }
         components.add(swarm);
         components.add(tank);
     }
@@ -49,12 +56,16 @@ public class Engine extends Drawable {
     }
     public void spawnTankBullet(int speed) {
         if(tankBullet == null || !components.contains(tankBullet)) {
-            Bullet bullet = new Bullet(tank.getX(),tank.getY()-1,-speed, getHeight());
-            synchronized(components) {
-                components.add(bullet);
-            }
+            Bullet bullet = spawnBullet(tank.getX()+tank.getWidth()/2, tank.getY()-1, -speed);
             tankBullet = bullet;
         }
+    }
+    public Bullet spawnBullet(int x, int y, int speed) {
+        Bullet bullet = new Bullet(x, y, speed, getHeight());
+        synchronized(components) {
+            newComponents.add(bullet);
+        }
+        return bullet;
     }
     @Override
     public void draw(Canvas canvas) {
@@ -71,12 +82,22 @@ public class Engine extends Drawable {
                     component.move();
                 }
             }
+            //add new components
+            synchronized(newComponents) {
+                for(Component component : newComponents) {
+                    components.add(component);                   
+                }
+                newComponents.clear();
+            }
             //perform collision check
             synchronized(components) {
                 for(Component component : components) {
                     if(component instanceof Bullet) {
                         Bullet bullet = (Bullet)component;
                         swarm.collide(bullet);
+                        for(Barrier barrier : barriers) {
+                            barrier.collide(bullet);
+                        }
                     }
                 }
             }
@@ -100,5 +121,8 @@ public class Engine extends Drawable {
                 }
             }
         }
+    }
+    public static boolean collides(Hitbox box1, Hitbox box2) {
+        return box1.getX() < box2.getX()+box2.getWidth() && box1.getX()+box1.getWidth() > box2.getX() && box1.getY() < box2.getY()+box2.getHeight() && box1.getY()+box1.getHeight() > box2.getY();
     }
 }

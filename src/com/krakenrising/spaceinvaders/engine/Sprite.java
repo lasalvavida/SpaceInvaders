@@ -14,7 +14,7 @@ import android.graphics.Paint;
  *
  * @author Rob_2
  */
-public abstract class Sprite {
+public abstract class Sprite implements Hitbox {
     private int x, y, width, height;
     public abstract void draw(Canvas canvas);
     public int getX() {
@@ -123,5 +123,15 @@ public abstract class Sprite {
         {0,1,0,1,1,0,1,0},
         {1,0,0,0,0,0,0,1},
         {0,1,0,0,0,0,1,0}
+    };
+    public final static int[][] BARRIER = {
+        {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
+        {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+        {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+        {1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1},
+        {1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1},
+        {1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1},
+        {1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1}
     };
 }

@@ -8,6 +8,7 @@ package com.krakenrising.spaceinvaders.engine;
 
 import android.graphics.Canvas;
 import android.util.Log;
+import java.util.Random;
 
 /**
  *
@@ -23,6 +24,7 @@ public class Swarm implements Component {
     private int counter = 0;
     private boolean direction = false;
     private Engine engine;
+    private Random random = new Random();
     public Swarm(Engine engine, int screenWidth, int screenHeight) {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -50,6 +52,16 @@ public class Swarm implements Component {
         counter++;
         if(counter == speed) {
             counter = 0;
+            if(shouldFire()) {
+                int column = random.nextInt(invaders[0].length);
+                for(int i=invaders.length-1; i>=0; i--) {
+                    Invader invader = invaders[i][column];
+                    if(invader != null) {
+                        engine.spawnBullet(invader.getX()+invader.getWidth()/2, invader.getY()+invader.getHeight() + 10, 5);
+                        break;
+                    }
+                }
+            }
             boolean flag = false;
             for (int j = 0; j < invaders.length; j++) {
                 if (!flag) {
@@ -105,23 +117,20 @@ public class Swarm implements Component {
         }
     }
     public void collide(Bullet hitbox) {
+        boolean sentinel = false;
         for(int j=0; j<invaders.length; j++) {
-            for(int i=0; i<invaders[j].length; i++) {
-                Invader invader = invaders[j][i];
-                if(invader != null) {
-                    int ax1 = invader.getX();
-                    int bx2 = hitbox.getX()+hitbox.getWidth();
-                    int ax2 = invader.getX()+hitbox.getWidth();
-                    int bx1 = hitbox.getX();
-                    int ay1 = invader.getY();
-                    int by2 = hitbox.getY()+hitbox.getHeight();
-                    int ay2 = invader.getY()+hitbox.getHeight();
-                    int by1 = hitbox.getY();
-                    if(ax1 < bx2 && ax2 > bx1 && ay1 < by2 && ay2 > by1) {
-                        invaders[j][i].dispose();
-                        Log.d("Swarm","Dispose of bullet");
-                        hitbox.dispose();
-                        engine.setScore(engine.getScore()+invader.getScore());
+            if(!sentinel) {
+                for(int i=0; i<invaders[j].length; i++) {
+                    Invader invader = invaders[j][i];
+                    if(invader != null) {
+                        if(Engine.collides(invader, hitbox)) {
+                            invaders[j][i].dispose();
+                            Log.d("Swarm","Dispose of bullet");
+                            hitbox.dispose();
+                            engine.setScore(engine.getScore()+invader.getScore());
+                            sentinel = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -146,5 +155,8 @@ public class Swarm implements Component {
         return false;
     }
     public void dispose() {       
+    }
+    private boolean shouldFire() {
+        return random.nextInt(4) == 0;
     }
 }

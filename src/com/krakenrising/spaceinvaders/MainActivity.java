@@ -1,6 +1,7 @@
 package com.krakenrising.spaceinvaders;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,7 +27,8 @@ public class MainActivity extends Activity implements SensorEventListener, OnTou
         DrawSurfaceView view = new DrawSurfaceView(this, engine);
         view.setOnTouchListener(this);
         setContentView(view);
-        
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         sensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this, 
                 sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
