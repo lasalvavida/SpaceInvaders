@@ -34,17 +34,17 @@ public class Swarm implements Component {
         invaders = new Invader[5][11];
         for(int j=0; j<1; j++) {
             for(int i=0; i<11; i++) {
-                invaders[j][i] = new HighInvader(i*length, j*length, length-padding, length-padding);
+                invaders[j][i] = new HighInvader(i*length, (j+1)*length, length-padding, length-padding);
             }
         }
         for(int j=1; j<3; j++) {
             for(int i=0; i<11; i++) {
-                invaders[j][i] = new MediumInvader(i*length, j*length, length-padding, length-padding);
+                invaders[j][i] = new MediumInvader(i*length, (j+1)*length, length-padding, length-padding);
             }
         }
         for(int j=3; j<5; j++) {
             for(int i=0; i<11; i++) {
-                invaders[j][i] = new LowInvader(i*length, j*length, length-padding, length-padding);
+                invaders[j][i] = new LowInvader(i*length, (j+1)*length, length-padding, length-padding);
             }
         }
     }
@@ -87,6 +87,9 @@ public class Swarm implements Component {
                         Invader invader = invaders[j][i];
                         if (invader != null) {
                             invader.setY(invader.getY() + length);
+                            if(invader.getY()+invader.getHeight() >= screenHeight*7/8) {
+                                engine.gameOver();
+                            }
                         }
                     }
                 }
@@ -125,7 +128,6 @@ public class Swarm implements Component {
                     if(invader != null) {
                         if(Engine.collides(invader, hitbox)) {
                             invaders[j][i].dispose();
-                            Log.d("Swarm","Dispose of bullet");
                             hitbox.dispose();
                             engine.setScore(engine.getScore()+invader.getScore());
                             sentinel = true;

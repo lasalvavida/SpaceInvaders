@@ -16,4 +16,17 @@
         android:layout_height="wrap_content"
         android:text="Start"
         android:onClick="onClick"/>
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="\n1.Shoot all the aliens that you can.\n2.Don't get shot.\n3.Tap to shoot.\n4.Tilt the phone side-to-side to move."/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/sidetoside"/>
 </LinearLayout>

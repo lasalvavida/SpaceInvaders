@@ -41,7 +41,11 @@ public class DrawThread extends Thread {
                 }
             } finally {
                 if(canvas != null) {
-                    surfaceHolder.unlockCanvasAndPost(canvas);
+                    try {
+                        surfaceHolder.unlockCanvasAndPost(canvas);
+                    } catch(Exception e) {
+                        close();
+                    }
                 }
             }
             endTime = System.currentTimeMillis();

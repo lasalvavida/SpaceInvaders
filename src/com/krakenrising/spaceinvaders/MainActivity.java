@@ -44,6 +44,7 @@ public class MainActivity extends Activity implements SensorEventListener, OnTou
     
     public void onClick(View v) {
         engine = new Engine();
+        engine.setGameOverScreen(this, R.layout.main);
         DrawSurfaceView view = new DrawSurfaceView(this, engine);
         view.setOnTouchListener(this);
         setContentView(view);
