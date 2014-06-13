@@ -12,7 +12,7 @@ import android.graphics.Color;
 
 /**
  *
- * @author Rob_2
+ * @author Rob
  */
 public class LowInvader extends Invader {
     public LowInvader(int x, int y, int width, int height) {

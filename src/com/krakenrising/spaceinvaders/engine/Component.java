@@ -10,7 +10,7 @@ import android.graphics.Canvas;
 
 /**
  *
- * @author Rob_2
+ * @author Rob
  */
 public interface Component {
     public void move();

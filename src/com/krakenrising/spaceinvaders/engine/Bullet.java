@@ -9,11 +9,10 @@ package com.krakenrising.spaceinvaders.engine;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 /**
  *
- * @author Rob_2
+ * @author Rob
  */
 public class Bullet implements Component, Hitbox {
     private int x, y, speed, screenHeight;
@@ -27,7 +26,6 @@ public class Bullet implements Component, Hitbox {
     }
     
     public void move() {
-        Log.d("Bullet", "Pos:(" + x + ", " + y + "), Disposed: " + disposable);
         y += speed;
     }
     
@@ -36,7 +34,6 @@ public class Bullet implements Component, Hitbox {
     }
     
     public boolean isDisposable() {
-        Log.d("Bullet", y + " " + screenHeight);
         return disposable || y < 0 || y > screenHeight;
     }
 

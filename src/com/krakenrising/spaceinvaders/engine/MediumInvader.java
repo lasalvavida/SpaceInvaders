@@ -11,7 +11,7 @@ import android.graphics.Color;
 
 /**
  *
- * @author Rob_2
+ * @author Rob
  */
 public class MediumInvader extends Invader {
     public MediumInvader(int x, int y, int width, int height) {

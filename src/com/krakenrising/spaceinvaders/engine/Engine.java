@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
-import android.util.Log;
 import android.widget.TextView;
 import com.krakenrising.spaceinvaders.R;
 import com.krakenrising.spaceinvaders.view.Drawable;
@@ -21,7 +20,7 @@ import java.util.HashSet;
 
 /**
  *
- * @author Rob_2
+ * @author Rob
  */
 public class Engine extends Drawable {
     private Swarm swarm = null;
@@ -119,7 +118,6 @@ public class Engine extends Drawable {
                     for (Component component : components) {
                         //clean up
                         if (component.isDisposable()) {
-                            Log.d("Engine", "Dropping component");
                             drop.add(component);
                         } else {
                             component.draw(canvas);

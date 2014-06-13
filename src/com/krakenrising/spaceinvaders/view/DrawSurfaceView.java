@@ -7,13 +7,11 @@
 package com.krakenrising.spaceinvaders.view;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 /**
- *
- * @author Rob_2
+ * @author Rob
  */
 public class DrawSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private Context context;

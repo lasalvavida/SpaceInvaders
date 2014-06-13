@@ -7,12 +7,11 @@
 package com.krakenrising.spaceinvaders.engine;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import java.util.Random;
 
 /**
  *
- * @author Rob_2
+ * @author Rob
  */
 public class Swarm implements Component {
     private Invader[][] invaders;

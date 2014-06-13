@@ -10,12 +10,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
- * @author Rob_2
+ * @author Rob
  */
 public class DrawThread extends Thread {
     private SurfaceHolder surfaceHolder;
@@ -54,7 +51,7 @@ public class DrawThread extends Thread {
                 try {    
                     Thread.sleep((long)(fps-diff));
                 } catch (InterruptedException ex) {
-                    System.err.println("Sleep in DrawThread failed: " + ex.getMessage());
+                    //This never happens
                 }
             }
         }

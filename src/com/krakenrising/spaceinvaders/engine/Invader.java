@@ -10,7 +10,7 @@ import android.graphics.Canvas;
 
 /**
  *
- * @author Rob_2
+ * @author Rob
  */
 public abstract class Invader extends Sprite{
     private final int DISPOSE = 2;

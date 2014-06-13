@@ -12,7 +12,7 @@ import android.graphics.Paint;
 
 /**
  *
- * @author Rob_2
+ * @author Rob
  */
 public class Barrier implements Component {    
     int x, y, width, height;

@@ -12,7 +12,7 @@ import android.graphics.Paint;
 
 /**
  *
- * @author Rob_2
+ * @author Rob
  */
 public abstract class Sprite implements Hitbox {
     private int x, y, width, height;

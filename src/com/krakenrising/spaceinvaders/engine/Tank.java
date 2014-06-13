@@ -8,11 +8,10 @@ package com.krakenrising.spaceinvaders.engine;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
 
 /**
  *
- * @author Rob_2
+ * @author Rob
  */
 public class Tank implements Component, Hitbox{
     private int x, y, width, height, screenWidth;

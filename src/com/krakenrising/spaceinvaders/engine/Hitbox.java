@@ -8,7 +8,7 @@ package com.krakenrising.spaceinvaders.engine;
 
 /**
  *
- * @author Rob_2
+ * @author Rob
  */
 public interface Hitbox {
     public int getX();
