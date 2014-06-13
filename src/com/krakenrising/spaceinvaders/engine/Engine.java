@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
+import android.util.Log;
 import android.widget.TextView;
 import com.krakenrising.spaceinvaders.R;
 import com.krakenrising.spaceinvaders.view.Drawable;
@@ -33,10 +34,12 @@ public class Engine extends Drawable {
     private int score = 0;
     private float tilt = 0;
     private boolean ready = false;
+    private boolean paused = false;
     private Bullet tankBullet = null;
     private float loadAngle = 0;
     private Activity activity;
     private int gameOverView;
+    private int pauseRadius = 15;
     public void initialize() {
         swarm = new Swarm(this, getWidth(), getHeight());
         tank = new Tank(this, getWidth(), getHeight());
@@ -59,59 +62,67 @@ public class Engine extends Drawable {
         return score;
     }
     public void setScore(int score) {
-       this.score = score;
+        this.score = score;
     }
+
     public void spawnTankBullet(int speed) {
-        if(tankBullet == null || !components.contains(tankBullet)) {
-            Bullet bullet = spawnBullet(tank.getX()+tank.getWidth()/2, tank.getY()-4, -speed);
+        if (tankBullet == null || !components.contains(tankBullet)) {
+            Bullet bullet = spawnBullet(tank.getX() + tank.getWidth() / 2, tank.getY() - 4, -speed);
             tankBullet = bullet;
         }
     }
+
     public Bullet spawnBullet(int x, int y, int speed) {
         Bullet bullet = new Bullet(x, y, speed, getHeight());
-        synchronized(components) {
+        synchronized (components) {
             newComponents.add(bullet);
         }
         return bullet;
     }
+
     @Override
     public void draw(Canvas canvas) {
         try {
             if (ready) {
+                if (!paused) {
+                    //iterate movement
+                    synchronized (components) {
+                        for (Component component : components) {
+                            component.move();
+                        }
+                    }
+                    //add new components
+                    synchronized (newComponents) {
+                        for (Component component : newComponents) {
+                            components.add(component);
+                        }
+                        newComponents.clear();
+                    }
+                    //perform collision check
+                    synchronized (components) {
+                        for (Component component : components) {
+                            if (component instanceof Bullet) {
+                                Bullet bullet = (Bullet) component;
+                                if (collides(tank, bullet)) {
+                                    gameOver();
+                                }
+                                swarm.collide(bullet);
+                                for (Barrier barrier : barriers) {
+                                    barrier.collide(bullet);
+                                }
+                            }
+                        }
+                    }
+                }
                 Paint paint = new Paint();
                 paint.setColor(Color.BLACK);
                 paint.setStrokeWidth(0);
                 canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
                 paint.setColor(Color.WHITE);
                 canvas.drawText("Score: " + score, 10, 25, paint);
-                //iterate movement
-                synchronized (components) {
-                    for (Component component : components) {
-                        component.move();
-                    }
-                }
-                //add new components
-                synchronized (newComponents) {
-                    for (Component component : newComponents) {
-                        components.add(component);
-                    }
-                    newComponents.clear();
-                }
-                //perform collision check
-                synchronized (components) {
-                    for (Component component : components) {
-                        if (component instanceof Bullet) {
-                            Bullet bullet = (Bullet) component;
-                            if (collides(tank, bullet)) {
-                                gameOver();
-                            }
-                            swarm.collide(bullet);
-                            for (Barrier barrier : barriers) {
-                                barrier.collide(bullet);
-                            }
-                        }
-                    }
-                }
+
+                paint.setColor(Color.GRAY);
+                canvas.drawCircle(getWidth() - pauseRadius, pauseRadius, pauseRadius, paint);
                 //draw components
                 HashSet<Component> drop = new HashSet<Component>();
                 synchronized (components) {
@@ -149,26 +160,48 @@ public class Engine extends Drawable {
                 if (loadAngle == 360) {
                     loadAngle = 0;
                 }
+
             }
         } catch (Exception e) {
             //ignore exceptions
         }
     }
+
     public void setGameOverScreen(Activity activity, int viewId) {
         this.activity = activity;
         this.gameOverView = viewId;
     }
+
     public void gameOver() {
         activity.runOnUiThread(new GameOver());
     }
-    public static boolean collides(Hitbox box1, Hitbox box2) {
-        return box1.getX() < box2.getX()+box2.getWidth() && box1.getX()+box1.getWidth() > box2.getX() && box1.getY() < box2.getY()+box2.getHeight() && box1.getY()+box1.getHeight() > box2.getY();
+
+    public void pause() {
+        paused = true;
     }
-    
+
+    public void resume() {
+        paused = false;
+    }
+
+    public boolean hitPause(int x, int y) {
+        Log.d("Touch", "" + x + ">=" + (getWidth() - pauseRadius * 2) + " " + y + "<=" + pauseRadius * 2);
+        return x >= getWidth() - pauseRadius * 2 && y <= pauseRadius * 2;
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public static boolean collides(Hitbox box1, Hitbox box2) {
+        return box1.getX() < box2.getX() + box2.getWidth() && box1.getX() + box1.getWidth() > box2.getX() && box1.getY() < box2.getY() + box2.getHeight() && box1.getY() + box1.getHeight() > box2.getY();
+    }
+
     private class GameOver implements Runnable {
+
         public void run() {
             activity.setContentView(gameOverView);
-            ((TextView)activity.findViewById(R.id.score)).setText("GAME OVER!\nYour score was: " + score);
+            ((TextView) activity.findViewById(R.id.score)).setText("GAME OVER!\nYour score was: " + score);
         }
     }
 }

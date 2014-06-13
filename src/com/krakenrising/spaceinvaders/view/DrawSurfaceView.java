@@ -17,6 +17,7 @@ public class DrawSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Context context;
     private DrawThread thread;
     private Drawable delegate;
+    private boolean initialized = false;
     public DrawSurfaceView(Context context, Drawable delegate) {
         super(context);
         this.context = context;
@@ -30,7 +31,10 @@ public class DrawSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         thread = new DrawThread(holder, context, delegate);
         thread.start();
         delegate.updateDimensions(getWidth(), getHeight());
-        delegate.initialize();
+        if(!initialized) {
+            delegate.initialize();
+            initialized = true;
+        }
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {

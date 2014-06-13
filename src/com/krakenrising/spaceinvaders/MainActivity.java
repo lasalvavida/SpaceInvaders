@@ -17,12 +17,35 @@ public class MainActivity extends Activity implements SensorEventListener, OnTou
     private SensorManager sensorManager;
     private Engine engine;
     private float tilt;
+    private boolean holdPause = false;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(engine != null) {
+            if(engine.isPaused()) {
+                holdPause = true;
+            }
+            engine.pause();
+        }
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(engine != null) {
+            if(!holdPause) {
+                engine.resume();
+            }
+            holdPause = false;
+        }
     }
 
     public void onSensorChanged(SensorEvent event) {
@@ -38,7 +61,19 @@ public class MainActivity extends Activity implements SensorEventListener, OnTou
     }
 
     public boolean onTouch(View v, MotionEvent event) {
-        engine.spawnTankBullet(5);
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            int x = (int) event.getX();
+            int y = (int) event.getY();
+            if (engine.hitPause(x, y)) {
+                if (engine.isPaused()) {
+                    engine.resume();
+                } else {
+                    engine.pause();
+                }
+            } else {
+                engine.spawnTankBullet(5);
+            }
+        }
         return true;
     }
     
