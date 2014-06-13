@@ -29,9 +29,12 @@ public class Swarm implements Component {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         this.engine = engine;
-        length = screenWidth/16;
-        int padding = length/10;
         invaders = new Invader[5][11];
+        length = screenWidth/16;
+        generateInvaders();
+    }
+    private void generateInvaders() {
+        int padding = length/10;
         for(int j=0; j<1; j++) {
             for(int i=0; i<11; i++) {
                 invaders[j][i] = new HighInvader(i*length, (j+1)*length, length-padding, length-padding);
@@ -51,6 +54,12 @@ public class Swarm implements Component {
     public void move() {
         counter++;
         if(counter == speed) {
+            if(isEmpty()) {
+                generateInvaders();
+                if(speed > 1) {
+                    speed--;
+                }
+            }
             counter = 0;
             if(shouldFire()) {
                 int column = random.nextInt(invaders[0].length);
@@ -152,6 +161,16 @@ public class Swarm implements Component {
                 }
             }
         }
+    }
+    public boolean isEmpty() {
+        for(int j=0; j<invaders.length; j++) {
+            for(int i=0; i<invaders[j].length; i++) {
+                if(invaders[j][i] != null) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     public boolean isDisposable() {
         return false;

@@ -16,7 +16,7 @@ import android.util.Log;
  */
 public class Tank implements Component, Hitbox{
     private int x, y, width, height, screenWidth;
-    private int speed = 10;
+    private int speed = 5;
     private Engine engine;
     public Tank(Engine engine, int screenWidth, int screenHeight) {
         this.engine = engine;
